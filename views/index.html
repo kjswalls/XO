@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>XO</title>
+
+        <!-- CSS reset -->
+        <link href="../css/reset.css" rel="stylesheet"  />
+
+        <!-- App's own CSS -->
+        <link href="../css/styles.css" rel="stylesheet"  />
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="../fonts/font-awesome/css/font-awesome.min.css">
+
+        <!-- http://jquery.com -->
+        <script src="../js/jquery-3.1.1.min.js"></script>
+
+        <!-- Load the socket.io client -->
+        <script src="/socket.io/socket.io.js"></script>
+
+        <!-- Socket.io client logic, and game scripts -->
+        <script src="../js/scripts.js"></script>
+    </head>
+    <body>
+        <header>
+            <div class="turn">
+                <span class="premove">It's</span>
+                <span class="whosemove">X's</span>
+                <span class="postmove">turn</span>
+            </div>
+            <div class="statusbar">
+                <span class="status"></span>
+            </div>
+        </header>
+        <div class="middle">
+            <div class="column">
+                <div class="chatwrapper">
+                    <!-- <input class="nickname" type="text" autocomplete="off" name="nameinput" /> -->
+                    <div class="aside chat">
+                        <!-- <div class="chatbox chatbox-left">
+                            <span class="player O">Player O</span>
+                            <div class="bubble bubble-o">
+                                <span class="chattext">Yo! What's up?</span>
+                            </div>
+                            <span class="timestamp">19:11</span>
+                        </div>
+                        <div class="chatbox chatbox-right">
+                            <span class="player X">Player X</span>
+                            <div class="bubble bubble-x">
+                                <span class="chattext">Just about to smoke you...</span>
+                            </div>
+                            <span class="timestamp">19:12</span>
+                        </div> -->
+                        <form action="">
+                            <input type="text" autocomplete="off" name="chatinput" placeholder="Say something" class="chatinput" />
+                            <button class="btn" type="submit">></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="board">
+                    <table class="grid">
+                        <tr>
+                            <td id="0" class="td-top td-left">
+                            </td>
+                            <td id="1" class="td-top">
+                            </td>
+                            <td id="2" class="td-top td-right">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="3" class="td-left">
+                            </td>
+                            <td id="4">
+                            </td>
+                            <td id="5" class="td-right">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="6" class="td-bot td-left">
+                            </td>
+                            <td id="7" class="td-bot">
+                            </td>
+                            <td id="8" class="td-bot td-right td-corner">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="column">
+                <div class="optionwrapper">
+                    <div class="menu">
+                        <span class="menulink selected" id="invitelink"><a href="#">Invite</a></span>
+                        <span class="menulink" id="joinlink"><a href="#">Join</a></span>
+                        <span class="menulink" id="ailink"><a href="#">AI</a></span>
+                    </div>
+                    <div class="aside option">
+                        <div id="join" class="tabcontent">
+                            <p class="instructions">
+                                Enter the ID of a game to join:
+                            </p>
+                            <form class="joinform" action="#">
+                                <input type="text" autocomplete="off" class="gameid">
+                                </span>
+                                <button class="join">Join</button>
+                            </form>
+                        </div>
+                        <div id="invite" class="tabcontent">
+                            <p class="instructions">
+                                Send your game ID to a friend:
+                            </p>
+                                <p class="gameid">
+                                    581962
+                                </p>
+                                <a href="#"><span class="fa fa-envelope-o fa-lg"></span></a>
+                        </div>
+                        <div id="ai" class="tabcontent">
+                            <p class="instructions">
+                                Select difficulty:
+                            </p>
+                            <p class="difficulty">
+                                <a id="easy" href="#">Easy</a>
+                            </p>
+                            <p class="difficulty">
+                                <a id="normal" href="#">Normal</a>
+                            </p>
+                            <p class="difficulty">
+                                <a id="hard" href="#">Hard</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bottom">
+            <span class="o-board O">O : 0</span>
+            <span class="restart"><a href="#">Restart</a></span>
+            <span class="x-board X">X : 0</span>
+        </div>
+        <!-- <footer>
+            <a href="http://kjswalls.com">Back to the homepage</a>
+        </footer> -->
+    </body>
+</html>

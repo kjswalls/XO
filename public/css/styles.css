@@ -1,0 +1,501 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700');
+
+@font-face {
+    font-family: 'Helvetica Neue Bold';
+    src: url(../fonts/helvetica-neue-bold.ttf);
+}
+
+html {
+    /* Fill the window with the background gradient, per:
+    http://stackoverflow.com/questions/16841323/making-gradient-background-fill-page-with-css */
+
+    min-height: 100%;
+    background: rgba(34,34,34,1);
+
+     /*Old Browsers */
+    background: -moz-linear-gradient(top, rgba(34,34,34,1) 0%, rgba(71,60,102,1) 100%);
+
+     /* FF3.6+ */
+     background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(34,34,34,1)), color-stop(100%, rgba(71,60,102,1)));
+
+    /* Chrome, Safari4+ */
+    background: -webkit-linear-gradient(top, rgba(34,34,34,1) 0%, rgba(71,60,102,1) 100%);
+
+     /* Chrome10+,Safari5.1+ */
+     background: -o-linear-gradient(top, rgba(34,34,34,1) 0%, rgba(71,60,102,1) 100%);
+
+     /* Opera 11.10+ */
+     background: -ms-linear-gradient(top, rgba(34,34,34,1) 0%, rgba(71,60,102,1) 100%);
+
+     /* IE 10+ */
+     background: linear-gradient(to bottom, rgba(34,34,34,1) 0%, rgba(71,60,102,1) 100%);
+
+    /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#222222', endColorstr='#473c66', GradientType=0 );
+    /* IE6-9 */
+}
+
+body {
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+}
+
+/* Default link styles */
+a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+/* Default link hover styles */
+a:hover {
+    color: #49e9d7;
+}
+
+header {
+    width: 100%;
+    margin: 3% auto;
+    text-align: center;
+    position: relative;
+}
+
+.select-diff {
+    background-color: #5d4b8b;
+    border: none;
+    padding: 15px;
+}
+
+/* Style "it's X's turn" heading */
+.turn {
+    font-size: 2.5rem;
+    margin: 1.5% auto;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+.statusbar {
+    width: 500px;
+    height: 30px;
+    margin: 0 auto;
+}
+
+.status {
+    font-size: 0.8rem;
+    padding-bottom: 0.5%;
+    border-bottom: 1px solid #49e9d7;
+}
+
+.premove {
+    width: 100%;
+}
+
+/* Style "X's turn" specifically */
+.whosemove {
+    font-weight: 700;
+    width: 100%;
+}
+
+.middle {
+    width: 100%;
+}
+
+/* Clearfix for the middle div continer, per http://learn.shayhowe.com/html-css/positioning-content/ */
+
+.middle:before,
+.middle:after {
+  content: "";
+  display: table;
+}
+.middle:after {
+  clear: both;
+}
+.middle {
+  clear: both;
+  *zoom: 1;
+}
+
+.column {
+    width: 30%;
+    float: left;
+    margin: 0 1.5%;
+}
+
+.chatwrapper {
+    width: 57%;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+}
+
+.nickname {
+    background-color: #463a64;
+    border: none;
+    border-radius: 15px;
+    padding: 5px 15px;
+    width: 20%;
+    color: #fff;
+    font-weight: 700;
+    outline: none;
+    text-align: center;
+}
+
+.aside {
+    height: 300px;
+    background-color: #5d4b8b;
+    border-radius: 10px;
+    text-align: center;
+    overflow: auto;
+    padding-bottom: 25%;
+    box-sizing: border-box;
+}
+
+.aside::-webkit-scrollbar {
+    display: none;
+}
+
+.chatbox {
+    margin-top: 8%;
+    clear: both;
+    max-width: 61%;
+    display: inline-block;
+    overflow: auto;
+    /* break words, per */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+
+    /* Break words to new lines, as per: http://stackoverflow.com/questions/10743763/word-wrap-break-word-does-not-work-in-this-example */
+
+    -ms-word-break: break-all;
+    /* This is the dangerous one in WebKit, as it breaks things wherever */
+    word-break: break-all;
+    /* Instead use this non-standard one: */
+    word-break: break-word;
+
+    /* Adds a hyphen where the word breaks, if supported (No Blink) */
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+}
+
+.chatbox-left {
+    margin-left: 8%;
+    float: left;
+}
+
+.chatbox-right {
+    float: right;
+    margin-right: 8%;
+}
+
+.player {
+    font-weight: 700;
+    display: block;
+    font-size: 0.8rem;
+    margin-bottom: 3%;
+}
+
+.chatbox-left .player {
+    margin-left: 15%;
+    float: left;
+}
+
+.chatbox-right .player {
+    margin-right: 15%;
+    float: right;
+}
+
+.bubble {
+    display: inline-block;
+    border-radius: 10px;
+    padding: 13px;
+    margin-bottom: 5%;
+    min-width: 60%;
+}
+
+.bubble-o {
+    background-color: #fcd58c;
+}
+
+.bubble-x {
+    background-color: #fc297d;
+}
+
+.chattext {
+    font-weight: 400;
+}
+
+.bubble-o .chattext {
+    color: #201c1e;
+}
+
+.timestamp {
+    display: block;
+    font-size: 0.5rem;
+    font-weight: 700;
+}
+
+.chatbox-left .timestamp {
+    margin-left: 15%;
+    float: left;
+}
+
+.chatbox-right .timestamp {
+    margin-right: 15%;
+    float: right;
+}
+
+input[name="chatinput"] {
+    clear: both;
+    background-color: #463a64;
+    border: none;
+    box-sizing: border-box;
+    border-radius: 15px;
+    padding: 5px 30px 5px 15px;
+    width: 82%;
+    color: #fff;
+    font-weight: 700;
+    /*font-size: 0.5rem;*/
+    display: inline-block;
+    margin: 20% auto 7%;
+    outline: none;
+    position: absolute;
+    top: 72%;
+    right: 8.3%;
+}
+
+/* Style placeholder text for all browsers */
+
+input[name="chatinput"]::-webkit-input-placeholder {
+   color: #a388e9;
+}
+
+input[name="chatinput"]:-moz-placeholder { /* Firefox 18- */
+   color: #a388e9;
+}
+
+input[name="chatinput"]::-moz-placeholder {  /* Firefox 19+ */
+   color: #a388e9;
+}
+
+input[name="chatinput"]:-ms-input-placeholder {
+   color: #a388e9;
+}
+
+.btn {
+    background-color: #fcd58c;
+    border: none;
+    border-radius: 10px;
+    padding: 0 6px;
+    position: absolute;
+    top: 88.2%;
+    right: 12%;
+}
+
+/* Create single borders for the board cells */
+.grid {
+    margin: 0 auto;
+    border-collapse: collapse;
+
+    /* Cell-width is fixed */
+    table-layout: fixed;
+}
+
+.grid td {
+    border: 1px solid #804fe9;
+    padding: 20px;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    cursor: pointer;
+}
+
+/* Remove edge borders from all td's */
+.grid .td-top {
+    border-style: none solid solid none;
+}
+
+.grid .td-left {
+    border-style: none solid solid none;
+}
+
+.grid .td-right {
+    border-style: none none solid solid;
+}
+
+.grid .td-bot {
+    border-style: solid solid none none;
+}
+
+.grid .td-corner {
+    border-style: solid none none solid;
+}
+
+/* Different font for X's and O's */
+.grid td span {
+    font-family: 'Helvetica Neue Bold', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.O {
+    color: #fcd58c;
+}
+
+.X {
+    color: #fc297d;
+}
+
+.optionwrapper {
+    width: 57%;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    font-size: 0.8em;
+}
+
+.option {
+    height: 250px;
+    margin-top: 10px;
+}
+
+.menu {
+    margin-top: 20px;
+}
+
+/* Clearfix for the menu div continer, per http://learn.shayhowe.com/html-css/positioning-content/ */
+
+.menu:before,
+.menu:after {
+  content: "";
+  display: table;
+}
+.menu:after {
+  clear: both;
+}
+.menu {
+  clear: both;
+  *zoom: 1;
+}
+
+/* Style menu links */
+.menulink {
+    display: inline-block;
+    float: left;
+    width: 30%;
+    margin: 0 1.5%;
+}
+
+.selected a {
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    color: #49e9d7;
+    /*border-bottom: 1px solid #49e9d7;*/
+}
+
+.tabcontent {
+    width: 100%;
+}
+
+#join {
+    display: none;
+}
+
+#ai {
+    display: none;
+}
+
+.instructions {
+    letter-spacing: 0.3px;
+    margin: 18% 25% 7%;
+    line-height: 1.2rem;
+}
+
+.gameid {
+    font-size: 1.5rem;
+    font-family: Roboto, sans-serif;
+    text-align: center;
+    color: #fafcfc;
+    font-weight: 300;
+    letter-spacing: 0.3px;
+    margin-bottom: 10%;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid #49e9d7;
+    width: 50%;
+    display: block;
+    margin: 0 auto 10%;
+    background-color: #5d4b8b;
+    outline: none;
+}
+
+.join {
+    padding: 2% 5%;
+    border-radius: 5px;
+    background-color: #fafcfc;
+    border: none;
+    font-size: 0.8rem;
+    margin-top: 8%;
+}
+
+.difficulty {
+    /*font-size: 1rem;*/
+    font-weight: 700;
+    /*letter-spacing: 0.8px;*/
+    margin: 10% auto;
+}
+
+.leaderboard {
+    text-align: center;
+    font-weight: 700;
+}
+
+.leaderboard-table {
+    margin: 0 auto;
+    table-layout: fixed;
+}
+
+.leaderboard-title {
+    margin-bottom: 5%;
+}
+
+.mini-board {
+    font-weight: 300;
+}
+
+.name {
+    padding-right: 20%;
+}
+
+.rank {
+    height: 30px;
+}
+
+.bottom {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.o-board {
+    font-size: 2rem;
+}
+
+.x-board {
+    font-size: 2rem;
+}
+
+.restart {
+    margin: 0 2.5%;
+    visibility: hidden;
+}
+
+footer {
+    text-align: center;
+    margin: 50px auto;
+}
+
+footer a {
+    font-size: 0.8rem;
+}
