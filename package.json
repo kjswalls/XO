@@ -4,6 +4,10 @@
   "engines": {
       "node": "6.9.1"
   },
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
   "description": "Multiplayer tic tac toe with chat",
   "dependencies": {
     "express": "^4.14.0",
