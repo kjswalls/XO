@@ -10,6 +10,8 @@ var currentPlayer = -1; // Machine player is 1, human player is -1
 var vsAI = false; // find out if we're playing the computer or not
 var difficultyLevel = "normal";
 var nextMove; // For the AI to store the board index of its next move
+var maxDepth = 5;
+var actions = {}; // Obj to hold potential AI actions
 
 // Keep track of whose turn it is (global)
 var turn = "X";
@@ -45,8 +47,9 @@ $(function() {
         vsAI = true;
         updateStatusBar('AI opponent selected! Restarting game...');
 
-        // Set player O to blank so we can't play as O anymore
+        // Set player O to blank so we can't play as O anymore, set X to us in case we were O in a previous multiplayer game
         playerO = '';
+        playerX = socket.id;
 
         // Reset the game scores
         xScore = 0;
@@ -190,23 +193,15 @@ $(function() {
 
         // If we're playing the computer, make an AI move
         if (vsAI === true && currentPlayer === 1) {
-            if (difficultyLevel === 'easy') {
-                easyMove();
-            }
-            else if (difficultyLevel === 'normal') {
-                normalMove();
-            }
-            else if (difficultyLevel === 'hard') {
-                // hardMove();
-                var moveScore = minimaxValue(oMoveCount, turn, board, status, result);
-                if (moveScore !== -1000) {
 
-                    // Find out the ID of the target
-                    var td_hash = '#' + nextMove;
-                    var $td = $(td_hash);
-                    update($td, nextMove);
-                }
-            }
+            nextMove = -1;
+            var moveScore = minimaxValue(oMoveCount, turn, board, status, 0);
+
+            // Find out the ID of the target
+            var td_hash = '#' + nextMove;
+            var $td = $(td_hash);
+            update($td, nextMove);
+
             movePlayed($td, socket); // advance turn, check for gameover
         }
     });
@@ -370,39 +365,41 @@ $(function() {
 });
 
 // Find out whether the game has ended
-function isTerminal(currentBoard) {
+function isTerminal(currentBoard, currentTurn) {
+
+    var availablePositions = findEmptyCells(currentBoard);
     for (var i = 0; i < currentBoard.length; i++) {
 
         // Find out if the current player has won horizontally
-        if (currentBoard[i] === turn && currentBoard[i + 1] === turn && currentBoard[i + 2] === turn && (i === 0 || i === 3 || i === 6)) {
+        if (currentBoard[i] === currentTurn && currentBoard[i + 1] === currentTurn && currentBoard[i + 2] === currentTurn && (i === 0 || i === 3 || i === 6)) {
 
             result = 'victory';
             return true;
         }
 
         // Find out if the player has won vertically
-        else if (currentBoard[i] === turn && currentBoard[i + 3] === turn && currentBoard[i + 6] === turn) {
+        else if (currentBoard[i] === currentTurn && currentBoard[i + 3] === currentTurn && currentBoard[i + 6] === currentTurn) {
 
             result = 'victory';
             return true;
         }
 
         // Find out if the player has won diagonally from 0
-        else if (currentBoard[i] === turn && currentBoard[i + 4] === turn && currentBoard[i + 8] === turn && i === 0) {
+        else if (currentBoard[i] === currentTurn && currentBoard[i + 4] === currentTurn && currentBoard[i + 8] === currentTurn && i === 0) {
 
             result = 'victory';
             return true;
         }
 
         // Find out if the player has won diagonally from 2
-        else if (currentBoard[i] === turn && currentBoard[i + 2] === turn && currentBoard[i + 4] === turn && i === 2) {
+        else if (currentBoard[i] === currentTurn && currentBoard[i + 2] === currentTurn && currentBoard[i + 4] === currentTurn && i === 2) {
 
             result = 'victory';
             return true;
         }
 
         // Find out if the board is full
-        else if (i === 8 && movecount === 9) {
+        else if (i === 8 && availablePositions.length === 0) {
 
             result = 'draw';
             return true;
@@ -444,7 +441,7 @@ function update($td, tdid) {
                 if (turn === 'X') {
                     $span.text('X').attr('class', 'X');
                 }
-                else if (turn === "O") {
+                else if (turn === 'O') {
                     $span.text('O').attr('class', 'O');
                 }
 
@@ -453,6 +450,9 @@ function update($td, tdid) {
 
                 // Append span to TD
                 $span.appendTo($td);
+                if (turn === 'O') {
+                    oMoveCount++;
+                }
                 movecount++;
                 // playClick();
 
@@ -566,6 +566,7 @@ function restartGame() {
     updateStatusBar("Game restarted");
 
     movecount = 0;
+    oMoveCount = 0;
     currentPlayer = -1;
     turn = 'X';
     status = "running";
@@ -583,63 +584,60 @@ function findEmptyCells(currentBoard) {
 };
 
 /* This function scores possible moves for the AI player by evluating each end game state and the moves it takes to get there. It takes in the result of the end game state and the number of moves the O player has made to get there. */
-function score(aStatus, aResult, aTurn, aOMoveCount) {
-    if (aStatus === 'gameover') {
+function score(aResult, aTurn, aOMoveCount) {
 
-        // If X won
-        if (aResult === 'victory' && aTurn === 'X') {
+    function randomIntFromInterval(min, max) {
+        return Math.floor(Math.random() * (max - min + 1) + min);
+    }
 
-            // Return 10 (ideal score for X) - number of O moves, to incentivize the O player to prolong defeat as long as possible
+    // If X won
+    if (aResult === 'victory' && aTurn === 'X') {
+
+        // Return 10 (ideal score for X) - number of O moves, to incentivize the O player to prolong defeat as long as possible
+        if (difficultyLevel === 'hard') {
             return 10 - aOMoveCount;
         }
-
-        // If O won
-        else if (aResult === 'victory' && aTurn === 'O') {
-
-            // Return -10 (ideal score for O) plus number of moves O made, to incentivize X to prolong defeat as long as possible
-            return -10 + aOMoveCount;
+        else if (difficultyLevel === 'normal') {
+            var mod = randomIntFromInterval(3, 6);
+            return 10 - mod - aOMoveCount;
         }
-        else {
-
-            // It's a draw
-            return 0;
+        else if (difficultyLevel === 'easy') {
+            var mod = randomIntFromInterval(6, 10);
+            return 10 - mod - aOMoveCount;
         }
+    }
+
+    // If O won
+    else if (aResult === 'victory' && aTurn === 'O') {
+
+        // Return -10 (ideal score for O) plus number of moves O made, to incentivize X to prolong defeat as long as possible
+        return -10 + aOMoveCount;
+    }
+    else {
+
+        // It's a draw
+        return 0;
     }
 };
 
-/* Performs a theoretical AI action by placing a piece on the board. Expects an index of the board array to place a piece on */
-function aiAction(position, aBoard, aOMoveCount, aTurn) {
-
-        // Place the piece on the board
-        aBoard[position] = turn;
-
-        // If it's O's turn, update the oMoveCount
-        if (turn === 'O') {
-            aOMoveCount++;
-        }
-
-        // Advance the turn
-        aTurn === 'X' ? aTurn = 'O' : aTurn = 'X';
-};
-
-
 /* This function calculates the minimax value of a board configuration, using the score function to evaluate board states */
-function minimaxValue(aOMoveCount, aTurn, aBoard, aStatus, aResult) {
+function minimaxValue(aOMoveCount, aTurn, aBoard, aStatus) {
 
-    // // Capture a snapshot of the current global variables to work with
-    // var aOMoveCount = oMoveCount;
-    // var aTurn = turn;
-    // var aBoard = board;
-    // var aStatus = status;
-    // var aResult = result;
+    // If we've gone too far, return
+    if (aOMoveCount > maxDepth) {
+        return 0;
+    }
 
     // If the game is over, score this state
-    if (isTerminal(aBoard)) {
-        aStatus = 'gameover';
-        return score(aStatus, aResult, aTurn, aOMoveCount);
+    if (isTerminal(aBoard, aTurn)) {
+        var aResult = result;
+        result = '';
+        var myScore = score(aResult, aTurn, aOMoveCount);
+        return myScore;
     }
     else {
         var stateScore; // Stores the minimax value that is computed
+        var move = -1;
 
         if (aTurn === 'X') {
             stateScore = -1000; // Initialize to a value lower than any possible score (X maximizes)
@@ -653,16 +651,24 @@ function minimaxValue(aOMoveCount, aTurn, aBoard, aStatus, aResult) {
 
         // Enumerate the next possible board configurations, using info from availablePositions
         availablePositions.forEach(function(nextPosition) {
-            aiAction(nextPosition, aBoard, aOMoveCount, aTurn); // Try the move
 
-            var thisScore = minimaxValue(aOMoveCount, aTurn, aBoard, aStatus, aResult); // recursive call
+            // Place the piece on the board
+            aBoard[nextPosition] = aTurn;
+
+            // If it's O's turn, update the oMoveCount
+            var newOMoveCount = aTurn === 'O' ? aOMoveCount + 1 : aOMoveCount;
+
+            // Advance the turn
+            var nextTurn = aTurn === 'X' ? 'O' : 'X';
+
+            var thisScore = minimaxValue(newOMoveCount, nextTurn, aBoard, aStatus); // recursive call
 
             if (aTurn === 'X') {
                 if (thisScore > stateScore) {
 
                     // Update the state score if the nextScore is bigger, since X wants to maximize
                     stateScore = thisScore;
-                    nextMove = nextPosition;
+                    move = nextPosition;
                 }
             }
             else {
@@ -670,18 +676,23 @@ function minimaxValue(aOMoveCount, aTurn, aBoard, aStatus, aResult) {
 
                     //Update the state score if the nextScore is smaller than the current score, since O wants to minimize
                     stateScore = thisScore;
-                    nextMove = nextPosition;
+                    move = nextPosition;
                 }
             }
             aBoard[nextPosition] = 'E'; // Reset the board after trying the move
         });
+        if (move === -1) {
+            return 0; // no valid moves, so it's a tie
+        }
+        nextMove = move;
+        actions[nextMove] = stateScore;
         return stateScore; // return the minimax value
      }
 };
 
 function movePlayed($td, socket) {
     // If the game is over, update the status
-    if (isTerminal(board)) {
+    if (isTerminal(board, turn)) {
         status = 'gameover';
         socket.emit('gameover', roomID);
         return true;

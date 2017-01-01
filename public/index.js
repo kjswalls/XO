@@ -111,7 +111,8 @@ io.on('connection', function(socket) {
     });
 });
 
-// Set the web server to listen on port 3000, or the environment port variable
+/* Set the web server to listen on port 3000, or the environment port variable, as per:
+http://stackoverflow.com/questions/28706180/setting-the-port-for-node-js-server-on-heroku */
 
 var port = process.env.PORT || 3000;
 http.listen(port, function() {
