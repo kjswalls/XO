@@ -1,1 +1,1 @@
-Web-based tic tac toe with multiplayer and chat.
+Web-based tic tac toe with multiplayer, AI, and chat.

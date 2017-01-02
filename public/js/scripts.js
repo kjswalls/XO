@@ -620,7 +620,8 @@ function score(aResult, aTurn, aOMoveCount) {
     }
 };
 
-/* This function calculates the minimax value of a board configuration, using the score function to evaluate board states */
+/* This function calculates the minimax value of a board configuration, using the score function to evaluate board states.
+** Adapted from http://cdn.cs50.net/2015/fall/lectures/11/m/src11m/tic-tac-toe.c and https://mostafa-samir.github.io/Tic-Tac-Toe-AI/. */
 function minimaxValue(aOMoveCount, aTurn, aBoard, aStatus) {
 
     // If we've gone too far, return
