@@ -126,6 +126,7 @@ header {
     margin: 0 auto;
     text-align: center;
     position: relative;
+    max-width: 220px;
 }
 
 .nickname {
@@ -353,6 +354,7 @@ input[name="chatinput"]:-ms-input-placeholder {
     text-align: center;
     position: relative;
     font-size: 0.8em;
+    max-width: 220px;
 }
 
 .option {
